@@ -12,32 +12,49 @@ export class CredentialsRepository {
     this.cryptr = new Cryptr('password')
    }
 
-  async create(createCredentialDto: CreateCredentialDto, encryptedPassword: any, userId: number) {
-    const {title, url, user} = createCredentialDto
-    return await this.prisma.credentials.create({
+  create(credentialCrypted: CreateCredentialDto, userId: number) {
+    const {title, url, user, password} = credentialCrypted
+    return this.prisma.credentials.create({
       data: {
         title,
         url,
         user,
-        password: encryptedPassword,
+        password,
         userId //pegar esse userId de algum lugar
       }
     })
   }
 
-  async findAll(userId: number) {
-    return await this.prisma.credentials.findMany({
+  findAllUser(userId: number) {
+    return this.prisma.credentials.findMany({
       where: {
         userId
       }
     })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} credential`;
+  findOneTitleUser(title: string, userId: number) {
+    return this.prisma.credentials.findMany({
+      where: {
+        title,
+        userId
+      }
+    }) 
+  }
+
+  findOneId(id: number){
+    return this.prisma.credentials.findUnique({
+      where: {
+        id: Number(id)
+      }
+    })
   }
 
   remove(id: number) {
-    return `This action removes a #${id} credential`;
+    return this.prisma.credentials.delete({
+      where:{
+        id: Number(id)
+      }
+    })
   }
 }

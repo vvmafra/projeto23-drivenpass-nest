@@ -32,10 +32,10 @@ export class AuthService {
 
         return this.createToken(user)
     }
-    private async createToken(user: Users) {
+    createToken(user: Users) {
         const { id, email } = user
 
-        const token = this.jwtService.sign({ id, email }, {
+        const token = this.jwtService.sign({ email, id }, {
             expiresIn: this.EXPIRATION_TIME,
             subject: String(id),
             issuer: this.ISSUER,
@@ -45,16 +45,12 @@ export class AuthService {
         return { token }
     }
 
-    checkToken(token: string){
-        try {
-            const data = this.jwtService.verify(token, {
-                audience: this.AUDIENCE,
-                issuer: this.ISSUER
-            })
-            return data
-        } catch(error) {
-            console.log(error)
-            throw new BadRequestException(error)
-        }
+    checkToken(token: string) {
+        const data = this.jwtService.verify(token, {
+            audience: this.AUDIENCE,
+            issuer: this.ISSUER
+        })
+        return data
+
     }
 }
