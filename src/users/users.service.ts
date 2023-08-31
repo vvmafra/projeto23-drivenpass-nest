@@ -1,5 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { SignUpDto } from '../auth/dto/signup.dto';
 import { UsersRepository } from './users.repository';
 
 @Injectable()
@@ -7,21 +7,23 @@ export class UsersService {
 
   constructor(private readonly repository: UsersRepository) { }
 
-  async create(createUserDto: CreateUserDto) {
-    const {email, password} = createUserDto
+  async createUser(SignUpDto: SignUpDto) {
+    const {email, password} = SignUpDto
 
     const emailExist = await this.repository.findOneEmail(email)
-    if (emailExist) throw new HttpException("Email already registred", HttpStatus.CONFLICT)
+    if (emailExist) throw new ConflictException("Email already registred")
 
-    const user = await this.repository.create(createUserDto)
-    return user
+    return await this.repository.createUser(SignUpDto)
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async userById(id: number) { 
+    const user = await this.repository.findOneId(id)
+    if (!user) throw new NotFoundException("User not found")
+
+    return user 
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async userByEmail(email: string) {
+    return await this.repository.findOneEmail(email)
   }
 }
