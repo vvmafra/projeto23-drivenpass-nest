@@ -10,4 +10,8 @@ export class SignInDto {
     @IsNotEmpty()
     password: string
 
+
+    constructor(params?: Partial<SignInDto>) {
+        if (params) Object.assign(this, params);
+      }
 }

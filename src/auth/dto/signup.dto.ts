@@ -18,4 +18,7 @@ export class SignUpDto {
     }) // check if has uper and lower case,. number and special character
     password: string
 
+    constructor(params?: Partial<SignUpDto>) {
+        if (params) Object.assign(this, params);
+      }
 }
