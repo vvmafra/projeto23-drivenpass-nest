@@ -8,8 +8,6 @@ export class CredentialsRepository {
   private readonly cryptr: any;
 
   constructor(private readonly prisma: PrismaService) {
-    const Cryptr = require('cryptr');
-    this.cryptr = new Cryptr('password')
    }
 
   create(credentialCrypted: CreateCredentialDto, userId: number) {

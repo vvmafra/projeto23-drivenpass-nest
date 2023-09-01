@@ -32,11 +32,11 @@ export class CredentialsService {
     const userId = user.id
 
     const userCredentials = await this.repository.findAllUser(userId)
-    if (!userCredentials) throw new HttpException("No Credentials found for this user", HttpStatus.NOT_FOUND)
+    if (!userCredentials) throw new NotFoundException("No Credentials found for this user")
 
     const decryptedCredentials = userCredentials.map(credential => ({
       ...credential,
-      password: this.cryptr.decrypt(credential.password),
+      password: this.cryptr.decrypt(credential.password)
     }));
 
     return decryptedCredentials
@@ -49,7 +49,12 @@ export class CredentialsService {
     if (!findCredentialById) throw new NotFoundException("Id not found")
     if (findCredentialById.userId !== userId) throw new ForbiddenException("You are not allowed to access this credential")
 
-    return findCredentialById
+    const decryptedCredential = {
+      ...findCredentialById,
+      password: this.cryptr.decrypt(findCredentialById.password)
+    }
+
+    return decryptedCredential
   }
 
   async remove(id: number, user: Users) {
