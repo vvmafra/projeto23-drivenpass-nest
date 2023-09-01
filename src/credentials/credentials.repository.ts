@@ -20,7 +20,7 @@ export class CredentialsRepository {
         url,
         user,
         password,
-        userId //pegar esse userId de algum lugar
+        userId
       }
     })
   }
