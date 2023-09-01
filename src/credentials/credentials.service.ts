@@ -66,4 +66,8 @@ export class CredentialsService {
     
     return this.repository.remove(id)
   }
+
+  async deleteMany(userId: number){
+    return await this.repository.deleteMany(userId)
+  }
 }

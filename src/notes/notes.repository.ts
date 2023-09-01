@@ -50,4 +50,12 @@ export class NotesRepository {
       }
     })
   }
+
+  deleteMany(userId: number) {
+    return this.prisma.notes.deleteMany({
+      where: {
+        userId: Number(userId)
+      }
+    })
+  }
 }

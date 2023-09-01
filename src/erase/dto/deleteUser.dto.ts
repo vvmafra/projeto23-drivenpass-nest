@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, IsStrongPassword, MinLength } from "class-validator";
 
-export class SignUpDto {
+export class DeleteUserDto {
     @IsString()
     @IsEmail()
     @IsNotEmpty()
@@ -15,7 +15,7 @@ export class SignUpDto {
         minLowercase: 1,
         minUppercase: 1,
         minSymbols: 1
-    }) // check if has uper and lower case,. number and special character
+    })
     password: string
 
 }

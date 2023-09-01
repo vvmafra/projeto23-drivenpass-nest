@@ -52,4 +52,9 @@ export class NotesService {
     
     return this.repository.remove(id)
   }
+
+  async deleteMany(userId: number){
+    return await this.repository.deleteMany(userId)
+  }
+  
 }

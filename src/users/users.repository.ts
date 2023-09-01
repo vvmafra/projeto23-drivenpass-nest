@@ -34,4 +34,12 @@ export class UsersRepository {
       }
     })
   }
+
+  deleteUser(id: number) {
+    return this.prisma.users.delete({
+      where: {
+        id: Number(id)
+      }
+    })
+  }
 }
