@@ -32,7 +32,7 @@ export class CredentialsService {
     const userId = user.id
 
     const userCredentials = await this.repository.findAllUser(userId)
-    if (!userCredentials) throw new NotFoundException("No Credentials found for this user")
+    if (userCredentials.length === 0) throw new NotFoundException("No Credentials found for this user")
 
     const decryptedCredentials = userCredentials.map(credential => ({
       ...credential,

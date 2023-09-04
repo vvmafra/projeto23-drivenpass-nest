@@ -39,7 +39,7 @@ export class CardsService {
     const userId = user.id
 
     const userCards = await this.repository.findAllUser(userId)
-    if (!userCards) throw new NotFoundException("No Cards found for this user")
+    if (userCards.length === 0) throw new NotFoundException("No Cards found for this user")
 
     const decryptedCards = userCards.map(cards => ({
       ...cards,

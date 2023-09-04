@@ -17,4 +17,8 @@ export class CreateCredentialDto {
     @IsString()
     @IsNotEmpty()
     password: string
+
+    constructor(params?: Partial<CreateCredentialDto>) {
+        if (params) Object.assign(this, params);
+      }
 }

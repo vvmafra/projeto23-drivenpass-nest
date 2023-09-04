@@ -1,5 +1,5 @@
 import { CardType } from "@prisma/client";
-import { IsBoolean, IsCreditCard, IsDate, IsDateString, IsEnum, IsNotEmpty, IsString, IsUrl } from "class-validator";
+import { IsBoolean, IsDateString, IsEnum, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateCardsDto {
     @IsString()
@@ -33,4 +33,8 @@ export class CreateCardsDto {
     @IsEnum(CardType)
     @IsNotEmpty()
     type: CardType
+
+    constructor(params?: Partial<CreateCardsDto>) {
+        if (params) Object.assign(this, params);
+    }
 }

@@ -28,7 +28,7 @@ export class NotesService {
     const userId = user.id
 
     const userNotes = await this.repository.findAllUser(userId)
-    if (!userNotes) throw new HttpException("No Credentials found for this user", HttpStatus.NOT_FOUND)
+    if (userNotes.length === 0) throw new HttpException("No Notes found for this user", HttpStatus.NOT_FOUND)
 
     return userNotes
   }
