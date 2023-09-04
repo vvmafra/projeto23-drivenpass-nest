@@ -37,22 +37,22 @@ describe('Users E2E Tests', () => {
     })
 
     it('SIGN-UP /auth => should create a new user', async () => {
-        const signInDto: SignUpDto = new SignUpDto({
+        const signUpDto: SignUpDto = new SignUpDto({
             email: faker.internet.email(),
             password: "123Victor!"
         })
 
         await request(app.getHttpServer())
             .post('/auth/sign-up')
-            .send(signInDto)
+            .send(signUpDto)
             .expect(HttpStatus.CREATED)
 
         const users = await prisma.users.findMany()
         expect(users).toHaveLength(1)
         const user = users[0]
 
-        const checkPassword = await bcrypt.compare(signInDto.password, user.password)
-        expect(user.email).toBe(signInDto.email)
+        const checkPassword = await bcrypt.compare(signUpDto.password, user.password)
+        expect(user.email).toBe(signUpDto.email)
         expect(checkPassword).toBe(true)
 
     })
@@ -63,30 +63,67 @@ describe('Users E2E Tests', () => {
             .withPassword("123Victor!")
             .persist()
 
-        const signInDto: SignUpDto = new SignUpDto({
+        const signUpDto: SignUpDto = new SignUpDto({
             email: "vi@vivi.com",
             password: "123Victor!"
         })
 
         await request(app.getHttpServer())
             .post('/auth/sign-up')
-            .send(signInDto)
+            .send(signUpDto)
             .expect(HttpStatus.CONFLICT)
     })
 
     it('SIGN-UP /auth => should not create if password is not strong enough', async () => {
 
-        const signInDto: SignUpDto = new SignUpDto({
+        const signUpDto: SignUpDto = new SignUpDto({
             email: "vi@vivi.com",
             password: "123"
         })
 
         await request(app.getHttpServer())
             .post('/auth/sign-up')
-            .send(signInDto)
+            .send(signUpDto)
             .expect(HttpStatus.BAD_REQUEST)
 
         const users = await prisma.users.findMany()
         expect(users).toHaveLength(0)
+    })
+
+    it('SIGN-IN /auth => should login and generate token when login', async () => {
+        await new UsersFactory(prisma)
+            .withEmail("vi@vivi.com")
+            .withPassword("123Victor!")
+            .persist()
+
+            const signInDto: SignUpDto = new SignUpDto({
+                email: "vi@vivi.com",
+                password: "123Victor!"
+            })
+
+            const response = await request(app.getHttpServer())
+            .post('/auth/sign-in')
+            .send(signInDto)
+            expect(response.status).toBe(HttpStatus.OK)
+            expect(response.body).toEqual({
+                token: expect.any(String)
+            })
+    })
+
+    it('SIGN-IN /auth => should get Unathorized (401) when email or passwords does not match with any in the database', async () => {
+        await new UsersFactory(prisma)
+            .withEmail("vi@vivi.com")
+            .withPassword("123Victor!")
+            .persist()
+
+            const signInDto: SignUpDto = new SignUpDto({
+                email: "vi@gmail.com",
+                password: "123456789Nice!"
+            })
+
+            const response = await request(app.getHttpServer())
+            .post('/auth/sign-in')
+            .send(signInDto)
+            expect(response.status).toBe(HttpStatus.UNAUTHORIZED)
     })
 })

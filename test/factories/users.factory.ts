@@ -1,8 +1,10 @@
 import { PrismaService } from "../../src/prisma/prisma.service"
+import * as bcrypt from "bcrypt" 
 
 export class UsersFactory {
     private email: string
     private password: string
+    private SALT=10
 
     constructor(private readonly prisma: PrismaService) { }
 
@@ -19,7 +21,7 @@ export class UsersFactory {
     build(){
         return {
             email: this.email,
-            password: this.password
+            password: bcrypt.hashSync(this.password, this.SALT)
         }
     }
 
