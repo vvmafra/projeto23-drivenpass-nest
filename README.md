@@ -1,6 +1,6 @@
 # DrivenPass Project
 - Back-end project to save sensitive informations, like cards, credentials and notes.
-- You can test accessing the deploy: https://dashboard.render.com/web/srv-cjr1che1208c738f4lr0
+- You can test accessing the deploy: https://drivenpass-deploy-i4s6.onrender.com/
 - You can access more information with Swagger. You just need to access /api in your application.
 
 ## About
